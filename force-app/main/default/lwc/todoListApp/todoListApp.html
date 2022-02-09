@@ -1,0 +1,31 @@
+<!--
+  @description       : 
+  @author            : Parjanya Roy
+  @group             : 
+  @last modified on  : 24-11-2021
+  @last modified by  : Parjanya Roy
+-->
+<template>
+    <lightning-card title="ToDo List" style="width: auto;height: auto;">
+    <lightning-button-icon slot="actions" icon-name="utility:sync" alternative-text="Sync" name="Sync"></lightning-button-icon>
+    
+    <ul class="slds-has-dividers_around slds-has-block-links_space">
+        <template for:each={taskList} for:item="task">
+            <li class="slds-item" key={task.id}>
+                {task.name}
+              </li>
+        </template>
+      </ul>
+        
+        
+    
+    
+        
+                <lightning-input  variant="label-hidden" required type="text" value={taskValue} label="Enter some text" onchange={updateTaskVariable} placeholder="Enter Task Name" ></lightning-input>
+        
+                <lightning-button variant="brand" title='Add Task'  onclick={addTask} class="slds-button slds-button_neutral slds-button_stretch"></lightning-button>
+        
+        
+    
+</lightning-card>
+</template>

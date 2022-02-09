@@ -1,0 +1,19 @@
+<aura:component controller="TestMapIterationController">
+	<aura:handler name="init" value="{!this}" action="{!c.getMapRecords}"/>
+    <aura:attribute name="testmessage" type="object" />
+    {!v.testmessage}
+    
+    
+    
+    <aura:iteration items="{!v.testmessage}" var="item">
+        <br/> >> {!item.crnumber}
+        <aura:iteration items="{!item.wrapper}" var="iteminner">
+            <br></br>1.{!iteminner}
+            <aura:iteration items="{!iteminner.recordList}" var="iteminnerinner">
+                <lightning:buttonIcon name="{!item.crnumber}" iconName="utility:chevrondown" variant="bare" onclick="{! c.doSomething }" alternativeText="Settings" title="" />
+                {!iteminnerinner.name}
+            </aura:iteration>
+            
+        </aura:iteration>
+    </aura:iteration>
+</aura:component>

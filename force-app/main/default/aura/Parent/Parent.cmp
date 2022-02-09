@@ -1,0 +1,13 @@
+<aura:component >
+    <aura:attribute name="Id" type="String"/>
+    <aura:attribute name="message" type="String" default="defaultMessage" />
+    <aura:handler name="childCompEvent" event="c:ComponentEvent" action="{!c.handleCompEvent}" phase="bubble"/>
+    <aura:handler  event="c:ApplicationEvent" action="{!c.handleApplEvent}" phase="default"/>
+    <lightning:button label="Invoke Child Method" onclick="{!c.invokeChildMethod}"/>
+    <div class="slds-box">
+        <div class="slds-text">{!v.Id}</div>
+        <div class="slds-text">{!v.message}</div>
+        <c:Child aura:Id="child1" Id="{!v.Id +'Child 1'}"/>
+        <c:Child aura:Id="child2" Id="{!v.Id +'Child 2'}"/>
+    </div>
+</aura:component>

@@ -1,0 +1,38 @@
+<!--
+  @description       : 
+  @author            : Parjanya Roy
+  @group             : 
+  @last modified on  : 27-12-2021
+  @last modified by  : Parjanya Roy
+-->
+<template>
+    <lightning-layout>
+        <lightning-layout-item size="12" flexibility="auto">
+            <lightning-card  title="Income Details">
+                <template if:true={isProcessing}><lightning-spinner alternative-text="Loading" size="small"></lightning-spinner></template>
+                <lightning-button label="Refresh" slot="actions" onclick={handleRefreshIncomeData}></lightning-button>
+                <p class="slds-var-p-around_medium">{department}</p>
+                <ul class="slds-has-dividers_around-space slds-has-block-links_space slds-var-p-around_medium">
+                    <template for:each={salaryDetails} for:item="salaryrecord">
+                    <li class="slds-item" key={salaryrecord.id}>
+                      <lightning-layout vertical-align="center">
+                          <lightning-layout-item>
+                      <lightning-input type="text" variant="label-hidden" label="Name" class="slds-var-p-around_small" value={salaryrecord.name} readonly></lightning-input>
+                    </lightning-layout-item>
+                     <lightning-layout-item>
+                      <lightning-input type="text" variant="label-hidden" label="Salary" class="slds-var-p-around_small"  value={salaryrecord.salary} readonly></lightning-input>
+                    </lightning-layout-item>
+                    <lightning-layout-item><lightning-button-icon  data-recid={salaryrecord.id} icon-name="utility:delete" onclick={handleDeleteRecord}  alternative-text="Delete" title="Delete"></lightning-button-icon>
+                    </lightning-layout-item>
+                    </lightning-layout>
+                    </li>
+                    </template>
+                  </ul>
+                <div slot="footer"> 
+                    <lightning-input type="text" variant="label-hidden" label="Name" class="slds-var-p-around_small" onchange={handleAddNewName} placeholder="Enter Name" required></lightning-input>
+                    <lightning-input type="text" variant="label-hidden" label="Salary" class="slds-var-p-around_small" onchange={handleAddNewSalary}  placeholder="Enter Salary" required></lightning-input>
+                    <lightning-button variant="brand" label="Save" title="Save salary" onclick={handleAddSalary} class="slds-m-left_x-small slds-var-p-around_medium"></lightning-button></div>
+            </lightning-card>
+         </lightning-layout-item>
+    </lightning-layout>
+</template>

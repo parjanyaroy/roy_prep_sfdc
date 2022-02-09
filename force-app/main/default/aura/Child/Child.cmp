@@ -1,0 +1,14 @@
+<aura:component >
+	<aura:attribute name="Id" type="String"/>
+    <aura:attribute name="message" type="String" default="defaultMessage" />
+    <aura:registerevent name="childCompEvent" type="c:ComponentEvent"/>
+    <aura:handler name="childCompEvent" event="c:ComponentEvent" action="{!c.handleCompEvent}" phase="bubble"/>
+    <aura:handler  event="c:ApplicationEvent" action="{!c.handleApplEvent}" phase="default"/>
+    <aura:method name="childMethod" action="{!c.passMessage}" access="global"/>
+    <div class="slds-box">
+        <div class="slds-text">{!v.Id}</div>
+        <div class="slds-text">{!v.message}</div>
+        <lightning:button label="Fire Component Event" onclick="{!c.fireCompEvent}"/>
+        <lightning:button label="Fire Application Event" onclick="{!c.fireApplEvent}"/>
+    </div>
+</aura:component>
