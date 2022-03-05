@@ -18,7 +18,7 @@
         <lightning-tabset variant="scoped">
             <template for:each={selectedComponentBundleData} for:item="bundleTab">
                 <lightning-tab label={bundleTab.format} key={bundleTab.Id} >
-                    <pre><code class="html">
+                    <pre><code class={bundleTab.format}>
                      {bundleTab.source} 
                     </code></pre>
                 </lightning-tab>
