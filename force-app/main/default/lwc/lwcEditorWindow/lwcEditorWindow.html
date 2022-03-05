@@ -1,0 +1,34 @@
+<!--
+  @description       : 
+  @author            : Parjanya Roy
+  @group             : 
+  @last modified on  : 05-03-2022
+  @last modified by  : Parjanya Roy
+-->
+<template>
+    <lightning-card title="Component Viewer">
+        <template if:true={isLoading}>
+        <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
+        </template>
+        <template if:true={selectedComponentId}>
+        <div class="slds-p-around_x-small">
+            <lightning-badge label={selectedComponentName} class="slds-badge_inverse"></lightning-badge>
+        </div>
+        <div class="slds-p-around_x-small">
+        <lightning-tabset variant="scoped">
+            <template for:each={selectedComponentBundleData} for:item="bundleTab">
+                <lightning-tab label={bundleTab.format} key={bundleTab.Id} >
+                    <pre><code class="html">
+                     {bundleTab.source} 
+                    </code></pre>
+                </lightning-tab>
+            </template>
+        </lightning-tabset>
+        </div>
+    </template>
+    <template if:false={selectedComponentId}>
+        <div class="slds-align_absolute-center">Please Select a Lightning Web Component from the left to view configuration</div>
+    </template>
+    
+    </lightning-card>
+</template>

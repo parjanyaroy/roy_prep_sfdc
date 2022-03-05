@@ -38,3 +38,8 @@ System.debug(ApexUtil.getAllSObject());
 System.debug(ApexUtil.getAllFields('IncomeDetail__c'));
 System.debug(ApexUtil.getAllPickListValues('Case','Status'));
 System.debug(ApexUtil.getRecordTypes('IncomeDetail__c'));
+// ----------------- TOOLING API -------------------
+ToolingAPIDemo.triggerToolingAPI();
+System.debug(LWCDetailsHelper.getLWCComponentList());
+System.debug(LWCDetailsHelper.getLWCComponentResource(new Set<String>{'0Rb5j000000W6vbCAC','0Rb5j000000V9n4CAC'}));
+LWCDetailsHelper.getLWCComponentAndResourceBundle();

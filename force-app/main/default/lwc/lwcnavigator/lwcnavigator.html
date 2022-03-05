@@ -1,0 +1,22 @@
+<!--
+  @description       : 
+  @author            : Parjanya Roy
+  @group             : 
+  @last modified on  : 05-03-2022
+  @last modified by  : Parjanya Roy
+-->
+<template>
+    <lightning-card title="LWC Navigator">
+      
+      <div class="slds-p-around_x-small">
+      <ul class="slds-has-dividers_top slds-has-block-links_space">
+        <template for:each={mapkeyvaluestore} for:item="lwc">
+          <li key={lwc.Id} class="slds-item slds-align_left">
+            <lightning-button variant="base" label={lwc.DeveloperName} data-lwcid={lwc.Id} data-lwcname={lwc.DeveloperName} onclick={handleSelectedComponent}></lightning-button>
+          </li>
+        </template>
+      </ul>
+    </div>
+    
+   </lightning-card>
+</template>
