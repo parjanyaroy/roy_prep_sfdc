@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AuthProvider xmlns="http://soap.sforce.com/2006/04/metadata">
+    <consumerKey>3MVG9pRzvMkjMb6kwCmcO.WEm1NGzmjTMMgHrqCL.i5zz_yudtgkphVtw5hDbqRegRBS4KtE2b1M9HeZBMYVc</consumerKey>
+    <consumerSecret>RGy9upCVJS2tfUHrN6PxnCqnHzecXFHV77vIjuOtuXbphQFZpxlJLBre33ydABfSGPKSDrkzYtETj74kXBb8DHBBGPdiC2rX</consumerSecret>
+    <defaultScopes>refresh_token full</defaultScopes>
+    <friendlyName>CallMeBack_AuthProvider</friendlyName>
+    <includeOrgIdInIdentifier>true</includeOrgIdInIdentifier>
+    <providerType>Salesforce</providerType>
+    <sendAccessTokenInHeader>false</sendAccessTokenInHeader>
+    <sendClientCredentialsInHeader>false</sendClientCredentialsInHeader>
+    <sendSecretInApis>true</sendSecretInApis>
+</AuthProvider>
