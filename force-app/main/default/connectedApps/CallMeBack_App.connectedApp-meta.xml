@@ -3,8 +3,8 @@
     <contactEmail>parjanyaroy@gmail.com</contactEmail>
     <label>CallMeBack_App</label>
     <oauthConfig>
-        <callbackUrl>https://d5j000001kixzeaa-dev-ed.my.salesforce.com/services/authcallback/CallMeBack_AuthProvider</callbackUrl>
-        <consumerKey>3MVG9pRzvMkjMb6kwCmcO.WEm1NGzmjTMMgHrqCL.i5zz_yudtgkphVtw5hDbqRegRBS4KtE2b1M9HeZBMYVc</consumerKey>
+        <callbackUrl>https://DUMMY_URL.com/services/authcallback/CallMeBack_AuthProvider</callbackUrl>
+        <!--<consumerKey>3MVG9pRzvMkjMb6kwCmcO.WEm1NGzmjTMMgHrqCL.i5zz_yudtgkphVtw5hDbqRegRBS4KtE2b1M9HeZBMYVc</consumerKey>-->
         <isAdminApproved>true</isAdminApproved>
         <isConsumerSecretOptional>false</isConsumerSecretOptional>
         <isIntrospectAllTokens>false</isIntrospectAllTokens>
@@ -33,5 +33,4 @@
         <refreshTokenPolicy>infinite</refreshTokenPolicy>
     </oauthPolicy>
     <profileName>System Administrator</profileName>
-    <profileName>System Administrator API</profileName>
 </ConnectedApp>
