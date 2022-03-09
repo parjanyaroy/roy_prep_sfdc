@@ -9,7 +9,8 @@ public with sharing class LWCDetailsHelper {
         for(ChangedResourceBundle crb : updatedResourceBundle)
         {
             System.debug(endpoint+crb.Id+'/');
-            String response = triggerToolingAPI(endpoint+crb.Id+'/','PATCH','{"Source":"+'+crb.Source+'"}');
+            System.debug(crb.Source.escapeJava());
+            String response = triggerToolingAPI(endpoint+crb.Id+'/','PATCH','{"Source":"'+crb.Source.escapeJava()+'"}');
             allResponses.add(response);
         }
         return allResponses;
@@ -104,7 +105,7 @@ public with sharing class LWCDetailsHelper {
         }
         else if(protocol.trim().equalsIgnoreCase('PATCH')){
             req.setMethod('PATCH');
-            System.debug(body);
+            //System.debug(body);
             req.setBody(body);
         }
         HttpResponse response = h.send(req);
