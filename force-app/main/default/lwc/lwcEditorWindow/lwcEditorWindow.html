@@ -3,7 +3,7 @@
   @description       : 
   @author            : Parjanya Roy
   @group             : 
-  @last modified on  : 06-03-2022
+  @last modified on  : 10-03-2022
   @last modified by  : Parjanya Roy
 -->
 <template>
@@ -13,7 +13,7 @@
         </template>
         <template if:true={selectedComponentId}>
         <div class="slds-p-around_x-small">
-            <lightning-badge label={selectedComponentName} class="slds-badge_inverse"> </lightning-badge> {lwcBundleChangeListSize} Files Changed
+            <lightning-badge label={selectedComponentName} class="slds-badge_inverse"> </lightning-badge> {lwcBundleChangeListSize}
         </div>
         <div class="slds-p-around_x-small">
         <lightning-tabset variant="scoped">
@@ -22,7 +22,7 @@
                 <lightning-tab label={bundleTab.format} key={bundleTab.Id} >
                     <lightning-card>
                         <div class={bundleTab.Id}>
-                        <lightning-textarea data-id={bundleTab.Id} onchange={handleTextChange} style='--sds-c-textarea-sizing-min-height:450px;' value={bundleTab.source}>
+                        <lightning-textarea data-format={bundleTab.format} data-id={bundleTab.Id} onchange={handleTextChange} style='--sds-c-textarea-sizing-min-height:450px;' value={bundleTab.source}>
                             
                         </lightning-textarea>
                         </div>
@@ -41,6 +41,7 @@
     <template if:false={selectedComponentId}>
         <div class="slds-align_absolute-center">Please Select a Lightning Web Component from the left to view configuration</div>
     </template>
-    
+    {lwcBundleChangeResponse}
+    <c-response-modal response-list={lwcBundleChangeResponse}></c-response-modal>
     </lightning-card>
 </template>

@@ -10,6 +10,7 @@ import recordSelected from '@salesforce/messageChannel/lwcnavigator__c';
 import { loadScript, loadStyle } from 'lightning/platformResourceLoader';
 import highlightminjs from '@salesforce/resourceUrl/HighlightMinJS';
 
+
 export default class LwcEditorWindow extends LightningElement {
     subscription = null;
     selectedComponentId = null;
@@ -19,14 +20,19 @@ export default class LwcEditorWindow extends LightningElement {
     @wire(MessageContext)
     messageContext;
     lwcBundleChangeList = [];
-    lwcBundleChangeListSize ;
+    lwcBundleChangeListSize = this.lwcBundleChangeList.length+' Files Changed !';
+    // -- Needed in the MODAL ---
+    lwcBundleChangeResponse = [];
+
     
     saveLWCBundle()
     {
         console.log(this.lwcBundleChangeList);
         saveLWCBundles({updatedResourceBundle : this.lwcBundleChangeList})
         .then((response)=>{
-            console.log(response);
+           this.lwcBundleChangeResponse = response;
+           this.template.querySelector('c-response-modal').openModal(this.lwcBundleChangeResponse);
+            console.log(this.lwcBundleChangeResponse);
         }).catch((error) => {
             console.log(error);
         });
@@ -36,9 +42,8 @@ export default class LwcEditorWindow extends LightningElement {
     {
         var pBundleId = event.currentTarget.dataset.id;
         var pBundleChangedValue =event.target.value;
-        /*console.log(this.lwcBundleChangeList.some(function(el) {
-            return el.bundleId === pBundleId;}));
-        console.log(this.lwcBundleChangeList.map(function(e) { return e.bundleId; }).indexOf(pBundleId));*/
+        var pBundleChangedFormat =event.currentTarget.dataset.format;
+        var pBundleChangedComponentName = this.selectedComponentName;
         if(this.lwcBundleChangeList.some(function(el) {
             console.log(el.bundleId === pBundleId);
             return el.Id === pBundleId;})){ // If condition checks if a javascript object already exists in the Array with the same bundle ID
@@ -57,11 +62,14 @@ export default class LwcEditorWindow extends LightningElement {
             else{
                 this.lwcBundleChangeList.push({
                     Id : pBundleId ,
-                    Source : pBundleChangedValue 
+                    Source : pBundleChangedValue ,
+                    Format : pBundleChangedFormat,
+                    Name : pBundleChangedComponentName
                 });
             }
         
         console.log(this.lwcBundleChangeList);
+        this.lwcBundleChangeListSize = this.lwcBundleChangeList.length+' Files Changed !';
     }
 
     @wire(getResourceBundleForId,{ lwcId : '$selectedComponentId'})

@@ -1,17 +1,25 @@
 public with sharing class LWCDetailsHelper {
 
+    public static List<String> coreComponents = new List<String>{'lwcEditorWindow','lwcnavigator','responseModal','lwcviewercontainer'};
 
     @AuraEnabled
-    public static List<String> saveLWCBundles(List<ChangedResourceBundle> updatedResourceBundle){
-        List<String> allResponses = new List<String>();
+    public static List<ResponseWrapper> saveLWCBundles(List<ChangedResourceBundle> updatedResourceBundle){
+        List<ResponseWrapper> allResponses = new List<ResponseWrapper>();
         //System.debug(updatedResourceBundle);
         String endpoint = '/services/data/v52.0/tooling/sobjects/LightningComponentResource/' ;
         for(ChangedResourceBundle crb : updatedResourceBundle)
         {
+            System.debug(crb.Format);
+            System.debug(crb.Name);
             System.debug(endpoint+crb.Id+'/');
             System.debug('{"Source":"'+crb.Source.escapeJava()+'"}');
             String response = triggerToolingAPI(endpoint+crb.Id+'/','PATCH','{"Source":"'+crb.Source.escapeJava()+'"}');
-            allResponses.add(response);
+            ResponseWrapper resW = new ResponseWrapper();
+            resW.Id=crb.Id;
+            resW.Name=crb.Name;
+            resW.Format=crb.Format;
+            resW.Message=response.trim().length()>0?response : 'Changes saved successfully!';
+            allResponses.add(resW);
         }
         return allResponses;
     }
@@ -40,7 +48,10 @@ public with sharing class LWCDetailsHelper {
                 while (parser.nextToken() != null) {
                     if (parser.getCurrentToken() == JSONToken.START_OBJECT) {
                         LWCComponentBundleWrapper lwcComp = (LWCComponentBundleWrapper)parser.readValueAs(LWCComponentBundleWrapper.class);
-                        componentMap.put(lwcComp.Id,lwcComp);
+                        if(!coreComponents.contains(lwcComp.DeveloperName.trim()))
+                        {
+                            componentMap.put(lwcComp.Id,lwcComp);
+                        }
                     }
                 }
             }
@@ -81,7 +92,7 @@ public with sharing class LWCDetailsHelper {
                         {
                             lwcResource.format ='xml';
                         }
-                        
+                        lwcResource.format = lwcResource.format.toUpperCase();
                         resourceWrapperList.add(lwcResource);
                         
                     }
@@ -135,6 +146,23 @@ public with sharing class LWCDetailsHelper {
         public String Id {get ; set;}
         @AuraEnabled
         public String Source {get ; set;}
+        @AuraEnabled
+        public String Format {get ; set;}
+        @AuraEnabled
+        public String Name {get ; set;}
+    }
+
+    class ResponseWrapper
+    {
+        @AuraEnabled
+        public String Id {get ; set;}
+        @AuraEnabled
+        public String Format {get ; set;}
+        @AuraEnabled
+        public String Name {get ; set;}
+        @AuraEnabled
+        public String Message {get ; set;}
+        
     }
 
     
