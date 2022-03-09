@@ -1,5 +1,20 @@
 public with sharing class LWCDetailsHelper {
 
+
+    @AuraEnabled
+    public static List<String> saveLWCBundles(List<ChangedResourceBundle> updatedResourceBundle){
+        List<String> allResponses = new List<String>();
+        //System.debug(updatedResourceBundle);
+        String endpoint = '/services/data/v52.0/tooling/sobjects/LightningComponentResource/' ;
+        for(ChangedResourceBundle crb : updatedResourceBundle)
+        {
+            System.debug(endpoint+crb.Id+'/');
+            String response = triggerToolingAPI(endpoint+crb.Id+'/','PATCH','{"Source":"+'+crb.Source+'"}');
+            allResponses.add(response);
+        }
+        return allResponses;
+    }
+
     @AuraEnabled(cacheable=true)
     public  static String getLWCComponentAndResourceBundle() {
         Map<String,LWCComponentBundleWrapper> getAllComponents = getLWCComponentList();
@@ -87,12 +102,15 @@ public with sharing class LWCDetailsHelper {
         if(protocol.trim().equalsIgnoreCase('GET')){
             req.setMethod('GET');
         }
-        else {
-            
+        else if(protocol.trim().equalsIgnoreCase('PATCH')){
+            req.setMethod('PATCH');
+            System.debug(body);
+            req.setBody(body);
         }
         HttpResponse response = h.send(req);
         return response.getBody();
     }
+    
 
     class LWCComponentBundleWrapper{
         String DeveloperName { get; set; }
@@ -109,6 +127,13 @@ public with sharing class LWCDetailsHelper {
         public String Id { get; set; }
         @AuraEnabled
         public String LightningComponentBundleId { get; set; }
+    }
+
+    class ChangedResourceBundle{
+        @AuraEnabled
+        public String Id {get ; set;}
+        @AuraEnabled
+        public String Source {get ; set;}
     }
 
     

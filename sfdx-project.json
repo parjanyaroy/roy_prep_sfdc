@@ -1,12 +1,18 @@
 {
-  "packageDirectories": [
-    {
-      "path": "force-app",
-      "default": true
+    "packageDirectories": [
+        {
+            "path": "force-app",
+            "default": true,
+            "package": "LWC_IDE",
+            "versionName": "ver 1.0.0.22.03.01",
+            "versionNumber": "1.0.0.NEXT"
+        }
+    ],
+    "name": "roy_prep_mac",
+    "namespace": "",
+    "sfdcLoginUrl": "https://login.salesforce.com",
+    "sourceApiVersion": "53.0",
+    "packageAliases": {
+        "LWC_IDE": "0Ho5j000000TNCrCAO"
     }
-  ],
-  "name": "roy_prep_mac",
-  "namespace": "",
-  "sfdcLoginUrl": "https://login.salesforce.com",
-  "sourceApiVersion": "53.0"
 }

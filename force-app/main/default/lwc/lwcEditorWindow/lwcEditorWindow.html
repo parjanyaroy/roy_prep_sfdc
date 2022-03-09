@@ -1,8 +1,9 @@
+<!-- sldsValidatorIgnore -->
 <!--
   @description       : 
   @author            : Parjanya Roy
   @group             : 
-  @last modified on  : 05-03-2022
+  @last modified on  : 06-03-2022
   @last modified by  : Parjanya Roy
 -->
 <template>
@@ -12,15 +13,26 @@
         </template>
         <template if:true={selectedComponentId}>
         <div class="slds-p-around_x-small">
-            <lightning-badge label={selectedComponentName} class="slds-badge_inverse"></lightning-badge>
+            <lightning-badge label={selectedComponentName} class="slds-badge_inverse"> </lightning-badge> {lwcBundleChangeListSize} Files Changed
         </div>
         <div class="slds-p-around_x-small">
         <lightning-tabset variant="scoped">
             <template for:each={selectedComponentBundleData} for:item="bundleTab">
+                
                 <lightning-tab label={bundleTab.format} key={bundleTab.Id} >
-                    <pre><code class={bundleTab.format}>
-                     {bundleTab.source} 
-                    </code></pre>
+                    <lightning-card>
+                        <div class={bundleTab.Id}>
+                        <lightning-textarea data-id={bundleTab.Id} onchange={handleTextChange} style='--sds-c-textarea-sizing-min-height:450px;' value={bundleTab.source}>
+                            
+                        </lightning-textarea>
+                        </div>
+                        <div slot="footer">
+                            <lightning-button-group>
+                                <lightning-button data-lwcbid={bundleTab.Id} variant="destructive" onclick={reloadComponentBundle} label="Cancel"></lightning-button>
+                                <lightning-button data-lwcbid={bundleTab.Id} label="Save" onclick={saveLWCBundle}></lightning-button>
+                            </lightning-button-group>
+                        </div>
+                    </lightning-card>
                 </lightning-tab>
             </template>
         </lightning-tabset>
