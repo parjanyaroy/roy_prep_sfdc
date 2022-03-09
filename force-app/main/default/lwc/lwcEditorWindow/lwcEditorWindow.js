@@ -4,7 +4,7 @@ import saveLWCBundles from '@salesforce/apex/LWCDetailsHelper.saveLWCBundles'
 import {
     subscribe,
     APPLICATION_SCOPE,
-    MessageContext
+    MessageContext 
 } from 'lightning/messageService';
 import recordSelected from '@salesforce/messageChannel/lwcnavigator__c';
 import { loadScript, loadStyle } from 'lightning/platformResourceLoader';
@@ -40,8 +40,10 @@ export default class LwcEditorWindow extends LightningElement {
             return el.bundleId === pBundleId;}));
         console.log(this.lwcBundleChangeList.map(function(e) { return e.bundleId; }).indexOf(pBundleId));*/
         if(this.lwcBundleChangeList.some(function(el) {
-            return el.bundleId === pBundleId;})){ // If condition checks if a javascript object already exists in the Array with the same bundle ID
-                var existingIndex = this.lwcBundleChangeList.map(function(e) { return e.bundleId; }).indexOf(pBundleId); // Get the existing object so that the change ccode can be used to replace the older value
+            console.log(el.bundleId === pBundleId);
+            return el.Id === pBundleId;})){ // If condition checks if a javascript object already exists in the Array with the same bundle ID
+                var existingIndex = this.lwcBundleChangeList.map(function(e) { return e.Id; }).indexOf(pBundleId); // Get the existing object so that the change ccode can be used to replace the older value
+                console.log('existingIndex '+existingIndex)
                 if(existingIndex!==-1){
                     this.lwcBundleChangeList[existingIndex]={
                         Id : pBundleId ,
