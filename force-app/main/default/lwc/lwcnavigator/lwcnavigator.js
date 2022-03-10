@@ -31,5 +31,11 @@ export default class Lwcnavigator extends LightningElement {
         console.log(payload);
         publish(this.messageContext, recordSelected, payload);
     }
+
+    handleDisplayNewLWCModal()
+    {
+        this.template.querySelector('c-create-new-lwc').openModal();
+
+    }
     }
 

@@ -2,12 +2,12 @@
   @description       : 
   @author            : Parjanya Roy
   @group             : 
-  @last modified on  : 05-03-2022
+  @last modified on  : 10-03-2022
   @last modified by  : Parjanya Roy
 -->
 <template>
     <lightning-card title="LWC Navigator">
-      
+      <lightning-button variant="brand" label="New LWC" title="New LWC" slot="actions" onclick={handleDisplayNewLWCModal} class="slds-m-left_x-small"></lightning-button>
       <div class="slds-p-around_x-small">
       <ul class="slds-has-dividers_top slds-has-block-links_space">
         <template for:each={mapkeyvaluestore} for:item="lwc">
@@ -17,6 +17,6 @@
         </template>
       </ul>
     </div>
-    
+    <c-create-new-lwc></c-create-new-lwc>
    </lightning-card>
 </template>
