@@ -41,7 +41,6 @@
     <template if:false={selectedComponentId}>
         <div class="slds-align_absolute-center">Please Select a Lightning Web Component from the left to view configuration</div>
     </template>
-    {lwcBundleChangeResponse}
-    <c-response-modal response-list={lwcBundleChangeResponse}></c-response-modal>
+    <c-response-modal response-list={lwcBundleChangeResponse} onreloadeditor={reloadComponentBundle}></c-response-modal>
     </lightning-card>
 </template>

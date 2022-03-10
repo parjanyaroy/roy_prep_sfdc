@@ -16,14 +16,8 @@ export default class ModalPopupLWC extends LightningElement {
         sortable: true
     },
     {
-        label: 'Format ',
+        label: 'Format',
         fieldName: 'Format',
-        type: 'text',
-        sortable: true
-    },
-    {
-        label: 'Message',
-        fieldName: 'Message',
         type: 'text',
         sortable: true
     },
@@ -32,18 +26,45 @@ export default class ModalPopupLWC extends LightningElement {
         fieldName: 'Name',
         type: 'text',
         sortable: true
+    },
+    
+    {
+        label: 'Message',
+        fieldName: 'Message',
+        type: 'text',
+        sortable: true
+    }
+    ,
+    
+    {
+        label: 'Status Code',
+        fieldName: 'ResponseStatusCode',
+        type: 'text',
+        sortable: true
+    }
+    ,
+    
+    {
+        label: 'Status',
+        fieldName: 'Status',
+        type: 'text',
+        sortable: true
     }
 ];
     
     @api
     openModal(changedBundleResponseArray) {
+        console.log(changedBundleResponseArray);
         this.responseList=changedBundleResponseArray;
         this.isModalOpen = true;
     }
     closeModal() {
         this.isModalOpen = false;
+        this.resetModalComponent();
     }
     resetModalComponent(){
         this.responseList = [];
+        const resetComponents = new CustomEvent('reloadeditor');
+        this.dispatchEvent(resetComponents);
     }
 }

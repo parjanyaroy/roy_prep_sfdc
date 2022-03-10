@@ -31,10 +31,11 @@ export default class LwcEditorWindow extends LightningElement {
         saveLWCBundles({updatedResourceBundle : this.lwcBundleChangeList})
         .then((response)=>{
            this.lwcBundleChangeResponse = response;
-           this.template.querySelector('c-response-modal').openModal(this.lwcBundleChangeResponse);
-            console.log(this.lwcBundleChangeResponse);
+           console.log(this.lwcBundleChangeResponse);
         }).catch((error) => {
             console.log(error);
+        }).finally(()=>{
+            this.template.querySelector('c-response-modal').openModal(this.lwcBundleChangeResponse);
         });
     }
 
@@ -45,14 +46,16 @@ export default class LwcEditorWindow extends LightningElement {
         var pBundleChangedFormat =event.currentTarget.dataset.format;
         var pBundleChangedComponentName = this.selectedComponentName;
         if(this.lwcBundleChangeList.some(function(el) {
-            console.log(el.bundleId === pBundleId);
+            //console.log(el.bundleId === pBundleId);
             return el.Id === pBundleId;})){ // If condition checks if a javascript object already exists in the Array with the same bundle ID
                 var existingIndex = this.lwcBundleChangeList.map(function(e) { return e.Id; }).indexOf(pBundleId); // Get the existing object so that the change ccode can be used to replace the older value
-                console.log('existingIndex '+existingIndex)
+                //console.log('existingIndex '+existingIndex)
                 if(existingIndex!==-1){
                     this.lwcBundleChangeList[existingIndex]={
                         Id : pBundleId ,
-                        Source : pBundleChangedValue 
+                        Source : pBundleChangedValue,
+                        Format : pBundleChangedFormat,
+                        Name : pBundleChangedComponentName
                     };
                 }
                 else{

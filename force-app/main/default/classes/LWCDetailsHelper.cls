@@ -5,7 +5,7 @@ public with sharing class LWCDetailsHelper {
     @AuraEnabled
     public static List<ResponseWrapper> saveLWCBundles(List<ChangedResourceBundle> updatedResourceBundle){
         List<ResponseWrapper> allResponses = new List<ResponseWrapper>();
-        //System.debug(updatedResourceBundle);
+        System.debug(updatedResourceBundle);
         String endpoint = '/services/data/v52.0/tooling/sobjects/LightningComponentResource/' ;
         for(ChangedResourceBundle crb : updatedResourceBundle)
         {
@@ -13,12 +13,16 @@ public with sharing class LWCDetailsHelper {
             System.debug(crb.Name);
             System.debug(endpoint+crb.Id+'/');
             System.debug('{"Source":"'+crb.Source.escapeJava()+'"}');
-            String response = triggerToolingAPI(endpoint+crb.Id+'/','PATCH','{"Source":"'+crb.Source.escapeJava()+'"}');
+            HttpResponse response = triggerToolingAPI(endpoint+crb.Id+'/','PATCH','{"Source":"'+crb.Source.escapeJava()+'"}');
             ResponseWrapper resW = new ResponseWrapper();
             resW.Id=crb.Id;
             resW.Name=crb.Name;
             resW.Format=crb.Format;
-            resW.Message=response.trim().length()>0?response : 'Changes saved successfully!';
+            resW.Message=response.getBody().trim().length()>0?response.getBody() : 'Changes saved successfully!';
+            resW.ResponseStatusCode = String.valueOf(response.getStatusCode());
+            resW.Status= response.getStatusCode()>=200 && response.getStatusCode()<=299 ? 'Success' : 'Failure';
+            System.debug(response);
+            System.debug(resW);
             allResponses.add(resW);
         }
         return allResponses;
@@ -40,7 +44,7 @@ public with sharing class LWCDetailsHelper {
     {
         Map<String,LWCComponentBundleWrapper> componentMap = new Map<String,LWCComponentBundleWrapper>();
         String endpoint = '/services/data/v52.0/tooling/query/?q=SELECT+Id,DeveloperName+FROM+LightningComponentBundle' ;
-        String response = triggerToolingAPI(endpoint,'GET',null);
+        String response = triggerToolingAPI(endpoint,'GET',null).getBody();
         System.debug(response);
         JSONParser parser = JSON.createParser(response);
         while (parser.nextToken() != null) {
@@ -80,7 +84,7 @@ public with sharing class LWCDetailsHelper {
         //System.debug(endpoint);
         endpoint=endpoint.replaceAll(' ','+');
         //System.debug('endpoint'+endpoint);
-        String response = triggerToolingAPI(endpoint,'GET',null);
+        String response = triggerToolingAPI(endpoint,'GET',null).getBody();
         System.debug(response);
         JSONParser parser = JSON.createParser(response);
         while (parser.nextToken() != null) {
@@ -103,7 +107,7 @@ public with sharing class LWCDetailsHelper {
         return resourceWrapperList;
     }
 
-    public static String triggerToolingAPI(String endpoint,String protocol,String body)
+    public static HttpResponse triggerToolingAPI(String endpoint,String protocol,String body)
     {
         Http h = new Http();
         HttpRequest req = new HttpRequest();
@@ -120,7 +124,7 @@ public with sharing class LWCDetailsHelper {
             req.setBody(body);
         }
         HttpResponse response = h.send(req);
-        return response.getBody();
+        return response;
     }
     
 
@@ -161,8 +165,11 @@ public with sharing class LWCDetailsHelper {
         @AuraEnabled
         public String Name {get ; set;}
         @AuraEnabled
-        public String Message {get ; set;}
-        
+        public String Message {get ; set;} 
+        @AuraEnabled
+        public String Status {get ; set;}
+        @AuraEnabled
+        public String ResponseStatusCode {get ; set;}
     }
 
     
