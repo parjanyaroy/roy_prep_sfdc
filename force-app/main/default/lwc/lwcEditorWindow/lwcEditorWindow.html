@@ -43,5 +43,6 @@
         <div class="slds-align_absolute-center">Please Select a Lightning Web Component from the left to view configuration</div>
     </template>
     <c-response-modal response-list={lwcBundleChangeResponse} onreloadeditor={reloadComponentBundle}></c-response-modal>
+    <c-unsaved-changes-modal ondiscardchanges={reloadComponentBundle} onsubmitchanges={saveLWCBundle}></c-unsaved-changes-modal> 
     </lightning-card>
 </template>

@@ -1,6 +1,6 @@
 public with sharing class LWCDetailsHelper {
 
-    public static List<String> coreComponents = new List<String>{'lwcEditorWindow','lwcnavigator','responseModal','lwcviewercontainer'};
+    public static List<String> coreComponents = new List<String>{'lwcEditorWindow','lwcnavigator','responseModal','lwcviewercontainer','unsavedChangesModal'};
 
     @AuraEnabled
     public static List<ResponseWrapper> saveLWCBundles(List<ChangedResourceBundle> updatedResourceBundle){

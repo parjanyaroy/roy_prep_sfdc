@@ -123,10 +123,15 @@ export default class LwcEditorWindow extends LightningElement {
     
 
     handleMessage(message) {
-        this.isLoading=true;
-        this.selectedComponentId = message.lwcId;
-        this.selectedComponentName = message.lwcName;
-        this.isLoading=false;
+        console.log('this.lwcBundleChangeListSize '+this.lwcBundleChangeListSize);
+        if(this.lwcBundleChangeList.length>0){
+            this.template.querySelector('c-unsaved-changes-modal').openModal();
+        }else{
+            this.isLoading=true;
+            this.selectedComponentId = message.lwcId;
+            this.selectedComponentName = message.lwcName;
+            this.isLoading=false;
+        }
         //this.reloadComponentBundle();
 
     }
