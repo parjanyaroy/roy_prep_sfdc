@@ -28,8 +28,8 @@
                         <!--<template for:each={responseList} for:item="res">
                             <p key={res.Id}>{res.Id}</p>
                         </template>-->
-                    <lightning-datatable data={responseList} columns={columns} key-field="Id">
-                    </lightning-datatable></template></p>
+                    <lightning-datatable data={responseList} columns={columns} key-field="Id" hide-checkbox-column>
+                    </lightning-datatable ></template></p>
                 </div>
                 <!-- Modal/Popup Box LWC footer starts here -->
                 <footer class="slds-modal__footer">
