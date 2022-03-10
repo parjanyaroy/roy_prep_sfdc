@@ -8,12 +8,13 @@
 -->
 <template>
     <lightning-card title="Component Viewer">
+        <lightning-button-icon icon-name="action:refresh"  alternative-text="Refresh" title="Refresh" slot="actions" onclick={refreshBundleData}></lightning-button-icon>
         <template if:true={isLoading}>
         <lightning-spinner alternative-text="Loading" size="small"></lightning-spinner>
         </template>
         <template if:true={selectedComponentId}>
         <div class="slds-p-around_x-small">
-            <lightning-badge label={selectedComponentName} class="slds-badge_inverse"> </lightning-badge> {lwcBundleChangeListSize}
+            <lightning-badge label={selectedComponentName} class="slds-badge_inverse"> </lightning-badge>  <lightning-badge label={lwcBundleChangeListSize} style="--sds-c-badge-color-background: orange;"> </lightning-badge>
         </div>
         <div class="slds-p-around_x-small">
         <lightning-tabset variant="scoped">

@@ -1,4 +1,4 @@
-import { LightningElement , wire , track } from 'lwc';
+import { LightningElement , wire , track , api } from 'lwc';
 import getResourceBundleForId from '@salesforce/apex/LWCDetailsHelper.getResourceBundleForId';
 import saveLWCBundles from '@salesforce/apex/LWCDetailsHelper.saveLWCBundles'
 import {
@@ -13,16 +13,27 @@ import highlightminjs from '@salesforce/resourceUrl/HighlightMinJS';
 
 export default class LwcEditorWindow extends LightningElement {
     subscription = null;
-    selectedComponentId = null;
-    selectedComponentName = null;
+    @api selectedComponentId = null;
+    @api selectedComponentName = null;
     selectedComponentBundleData = null ;
     isLoading = false;
     @wire(MessageContext)
     messageContext;
     lwcBundleChangeList = [];
-    lwcBundleChangeListSize = this.lwcBundleChangeList.length+' Files Changed !';
+    lwcBundleChangeListSize = this.lwcBundleChangeList.length+' unsaved changes!';
     // -- Needed in the MODAL ---
     lwcBundleChangeResponse = [];
+
+    refreshBundleData()
+    {
+        //this.reloadComponentBundle();
+        const selectedData = {
+            selectedComponentId : this.selectedComponentId,
+            selectedComponentName : this.selectedComponentName
+        }
+        const reloadeditorwindow = new CustomEvent('reloadeditorwindow',{detail : selectedData});
+        this.dispatchEvent(reloadeditorwindow);
+    }
 
     
     saveLWCBundle()
@@ -88,8 +99,11 @@ export default class LwcEditorWindow extends LightningElement {
     {
         this.subscribeToMessageChannel();
     }
+    @api
     reloadComponentBundle()
     {
+        this.lwcBundleChangeList = [];
+        this.lwcBundleChangeResponse = [];
         console.log('reload bundle ');
         eval("$A.get('e.force:refreshView').fire();");
     }
