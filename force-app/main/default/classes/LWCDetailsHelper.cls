@@ -30,9 +30,13 @@ public with sharing class LWCDetailsHelper {
     }
 
     @AuraEnabled
-    public static void createNewLWC(String componentName){
+    public static Map<String,String> createNewLWC(String componentName){
         if(componentName.trim().length()==0 || componentName.trim().contains(' '))
             throw new InvalidComponentNameException('The component name supplied was invalid');
+        String lwcBundleId = ((CreateLWCBundleResponse)JSON.deserialize(createLWCBundle(componentName),CreateLWCBundleResponse.class)).id;
+        System.debug(lwcBundleId);
+        Map<String,String> lwcBundleComponentCreationResponse = createLWCResource(componentName, lwcBundleId);
+        return lwcBundleComponentCreationResponse;
         
     }
    
@@ -41,28 +45,37 @@ public with sharing class LWCDetailsHelper {
         String endpoint = '/services/data/v52.0/tooling/sobjects/LightningComponentBundle/';
         String body = '{"FullName":"'+componentName+'","Metadata":{"apiVersion":52,"description": null,"isExplicitImport": false,"isExposed":true,"masterLabel": "'+componentName+'","targets": {"target": ["lightning__RecordPage","lightning__AppPage","lightning__HomePage"]}}}';
         HttpResponse resp = triggerToolingAPI(endpoint,'POST',body);
+        System.debug(resp.getBody());
         return resp.getBody().trim();
     }
 
     public static Map<String,String> createLWCResource(String componentName,String lwcBundleId)
     {
-
-        
+        Map<String,String> responseMap = new Map<String,String>();         
         String endpoint = '/services/data/v52.0/tooling/sobjects/LightningComponentResource/';
         
         String fpath_html = 'lwc/'+componentName+'/'+componentName+'.html';
         String sourceHTML = '<!-- @description: \n @author: '+Label.LWC_IDE_Author+' \n @last modified on: '+System.today()+' \n @last modified by: '+Label.LWC_IDE_Author+' -->\n<template>\n</template>';
-        String body_html = '{"FilePath": "'+fpath_html+'","LightningComponentBundleId":"'+lwcBundleId+'","Format":"html", "Source" : '+ sourceHTML+'}';
+        String body_html = '{"FilePath": "'+fpath_html+'","LightningComponentBundleId":"'+lwcBundleId+'","Format":"html", "Source" : "'+ sourceHTML.escapeJava()+'"}';
+        System.debug(body_html);
+        HttpResponse resp1 = triggerToolingAPI(endpoint,'POST',body_html);
+        responseMap.put(fpath_html,resp1.getBody());
 
         String fpath_js = 'lwc/'+componentName+'/'+componentName+'.js';
         String sourceJS = 'import { LightningElement } from \'lwc\'; \n export default class Empty extends LightningElement { \n }';
-        String body_js = '{"FilePath": "'+fpath_js+'","LightningComponentBundleId":"'+lwcBundleId+'","Format":"js", "Source" : '+ sourceJS+'}';
+        String body_js = '{"FilePath": "'+fpath_js+'","LightningComponentBundleId":"'+lwcBundleId+'","Format":"js", "Source" : "'+ sourceJS.escapeJava()+'"}';
+        System.debug(body_js);
+        HttpResponse resp2 = triggerToolingAPI(endpoint,'POST',body_js); //'{"source":"'+body_js+'"}');
+        responseMap.put(fpath_js,resp2.getBody());
 
-        String fpath_meta = 'lwc/'+componentName+'/'+componentName+'js-meta.xml';
+        String fpath_meta = 'lwc/'+componentName+'/'+componentName+'.js-meta.xml';
         String sourceMETA = '<?xml version="1.0"?>\n <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata"> \n <apiVersion>50</apiVersion> \n <isExposed>true</isExposed> \n 	<targets> <target>lightning__AppPage</target> \n <target>lightning__HomePage</target>\n<target>lightning__RecordPage</target>\n </targets> \n </LightningComponentBundle>';
-        String body_meta = '{"FilePath": "'+fpath_meta+'","LightningComponentBundleId":"'+lwcBundleId+'","Format":"xml", "Source" : '+ sourceMETA+'}';
+        String body_meta = '{"FilePath": "'+fpath_meta+'","LightningComponentBundleId":"'+lwcBundleId+'","Format":"xml", "Source" : "'+ sourceMETA.escapeJava()+'"}';
+        System.debug(body_meta);
+        HttpResponse resp3 = triggerToolingAPI(endpoint,'POST',body_meta);
+        responseMap.put(fpath_meta,resp3.getBody());
 
-        return null;
+        return responseMap;
     }
     
     @AuraEnabled(cacheable=true)
@@ -211,6 +224,15 @@ public with sharing class LWCDetailsHelper {
         @AuraEnabled
         public String ResponseStatusCode {get ; set;}
     }
+
+    class CreateLWCBundleResponse 
+    {
+        @AuraEnabled
+        public String id {get ; set;}
+        @AuraEnabled
+        public String success {get ; set;}
+    }
+
     public class InvalidComponentNameException extends Exception {}
 
     

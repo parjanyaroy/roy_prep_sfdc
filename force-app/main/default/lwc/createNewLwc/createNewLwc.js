@@ -1,4 +1,5 @@
 import { LightningElement,track,wire,api } from 'lwc';
+import createNewLWC from '@salesforce/apex/LWCDetailsHelper.createNewLWC'
 
 export default class CreateNewLwc extends LightningElement {//Boolean tracked variable to indicate if modal is open or not default value is false as modal is closed when page is loaded 
     @track isModalOpen = false;
@@ -20,6 +21,11 @@ export default class CreateNewLwc extends LightningElement {//Boolean tracked va
     submitDetails() {
         // to close modal set isModalOpen tarck value as false
         //Add your code to call apex method or do some processing
-        this.isModalOpen = false;
+        createNewLWC({componentName : this.newComponentName})
+        .then(response =>{
+            console.log(response)
+        }); 
+    
+        //this.isModalOpen = false;
     }
 }
