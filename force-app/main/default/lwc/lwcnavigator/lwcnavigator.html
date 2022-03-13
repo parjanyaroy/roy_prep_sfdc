@@ -2,21 +2,25 @@
   @description       : 
   @author            : Parjanya Roy
   @group             : 
-  @last modified on  : 10-03-2022
+  @last modified on  : 14-03-2022
   @last modified by  : Parjanya Roy
 -->
 <template>
     <lightning-card title="LWC Navigator">
       <lightning-button variant="brand" label="New LWC" title="New LWC" slot="actions" onclick={handleDisplayNewLWCModal} class="slds-m-left_x-small"></lightning-button>
-      <div class="slds-p-around_x-small">
-      <ul class="slds-has-dividers_top slds-has-block-links_space">
+      <div class="slds-p-around_x-small slds-scrollable_y">
+      <ul class="slds-has-dividers_around-space">
         <template for:each={mapkeyvaluestore} for:item="lwc">
           <li key={lwc.Id} class="slds-item slds-align_left">
             <lightning-button variant="base" label={lwc.DeveloperName} data-lwcid={lwc.Id} data-lwcname={lwc.DeveloperName} onclick={handleSelectedComponent}></lightning-button>
+            <div class="slds-float_right slds-p-right_x-small">
+            <lightning-button-icon icon-name="utility:delete" data-lwcid={lwc.Id} data-lwcname={lwc.DeveloperName}  onclick={deleteSelectedComponent} alternative-text="Delete"   title="Delete"></lightning-button-icon>
+            </div>
           </li>
         </template>
       </ul>
     </div>
     <c-create-new-lwc></c-create-new-lwc>
+    <c-delete-lwc-modal lwc-id-for-delete={deleteConfirmationCompId} lwc-name-for-delete={deleteConfirmationCompName} is-delete-l-w-c={isDeleteConfirmationDisplayed}></c-delete-lwc-modal>
    </lightning-card>
 </template>

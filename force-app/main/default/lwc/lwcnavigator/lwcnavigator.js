@@ -11,6 +11,12 @@ export default class Lwcnavigator extends LightningElement {
     @track
     mapkeyvaluestore = [];
 
+    // ------ For Delete Modal -----------c/createNewLwc
+    deleteConfirmationCompName ; 
+    deleteConfirmationCompId ; 
+    isDeleteConfirmationDisplayed = false;
+
+
     @wire(allLWCComponentBundles)
     getAllLWC(result)
     {
@@ -30,6 +36,14 @@ export default class Lwcnavigator extends LightningElement {
         };
         console.log(payload);
         publish(this.messageContext, recordSelected, payload);
+    }
+
+    deleteSelectedComponent(event){
+        this.deleteConfirmationCompId= event.currentTarget.dataset.lwcid;
+        this.deleteConfirmationCompName= event.currentTarget.dataset.lwcname;
+        this.isDeleteConfirmationDisplayed=true;
+        console.log(this.deleteConfirmationCompId,this.deleteConfirmationCompName,this.isDeleteConfirmationDisplayed);
+        this.template.querySelector('c-delete-lwc-modal').openModal();
     }
 
     handleDisplayNewLWCModal()

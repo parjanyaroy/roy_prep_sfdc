@@ -1,6 +1,6 @@
 public with sharing class LWCDetailsHelper {
 
-    public static List<String> coreComponents = new List<String>{'lwcEditorWindow','lwcnavigator','responseModal','lwcviewercontainer','unsavedChangesModal'};
+    public static List<String> coreComponents = new List<String>{'lwcEditorWindow','lwcnavigator','responseModal','lwcviewercontainer','unsavedChangesModal','createNewLwc'};
 
     
     @AuraEnabled
