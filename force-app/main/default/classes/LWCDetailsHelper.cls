@@ -2,10 +2,7 @@ public with sharing class LWCDetailsHelper {
 
     public static List<String> coreComponents = new List<String>{'lwcEditorWindow','lwcnavigator','responseModal','lwcviewercontainer','unsavedChangesModal'};
 
-    String sourceHTML = '<!-- @description: \n @author: '+Label.LWC_IDE_Author+' \n @last modified on: '+System.today()+' \n @last modified by: '+Label.LWC_IDE_Author+' -->\n<template>\n</template>';
-    String sourceJS = 'import { LightningElement } from \'lwc\'; \n export default class Empty extends LightningElement { \n }';
-    String sourceMETA = '<?xml version="1.0"?>\n <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata"> \n <apiVersion>50</apiVersion> \n <isExposed>true</isExposed> \n 	<targets> <target>lightning__AppPage</target> \n <target>lightning__HomePage</target>\n<target>lightning__RecordPage</target>\n </targets> \n </LightningComponentBundle>';
-
+    
     @AuraEnabled
     public static List<ResponseWrapper> saveLWCBundles(List<ChangedResourceBundle> updatedResourceBundle){
         List<ResponseWrapper> allResponses = new List<ResponseWrapper>();
@@ -35,7 +32,7 @@ public with sharing class LWCDetailsHelper {
     @AuraEnabled
     public static void createNewLWC(String componentName){
         if(componentName.trim().length()==0 || componentName.trim().contains(' '))
-            throw new Exception('The component name supplied was invalid');
+            throw new InvalidComponentNameException('The component name supplied was invalid');
         
     }
    
@@ -44,20 +41,25 @@ public with sharing class LWCDetailsHelper {
         String endpoint = '/services/data/v52.0/tooling/sobjects/LightningComponentBundle/';
         String body = '{"FullName":"'+componentName+'","Metadata":{"apiVersion":52,"description": null,"isExplicitImport": false,"isExposed":true,"masterLabel": "'+componentName+'","targets": {"target": ["lightning__RecordPage","lightning__AppPage","lightning__HomePage"]}}}';
         HttpResponse resp = triggerToolingAPI(endpoint,'POST',body);
-        return null;
+        return resp.getBody().trim();
     }
 
-    public static List<String> createLWCResource(String componentName,String lwcBundleId)
+    public static Map<String,String> createLWCResource(String componentName,String lwcBundleId)
     {
+
+        
         String endpoint = '/services/data/v52.0/tooling/sobjects/LightningComponentResource/';
         
         String fpath_html = 'lwc/'+componentName+'/'+componentName+'.html';
+        String sourceHTML = '<!-- @description: \n @author: '+Label.LWC_IDE_Author+' \n @last modified on: '+System.today()+' \n @last modified by: '+Label.LWC_IDE_Author+' -->\n<template>\n</template>';
         String body_html = '{"FilePath": "'+fpath_html+'","LightningComponentBundleId":"'+lwcBundleId+'","Format":"html", "Source" : '+ sourceHTML+'}';
 
         String fpath_js = 'lwc/'+componentName+'/'+componentName+'.js';
+        String sourceJS = 'import { LightningElement } from \'lwc\'; \n export default class Empty extends LightningElement { \n }';
         String body_js = '{"FilePath": "'+fpath_js+'","LightningComponentBundleId":"'+lwcBundleId+'","Format":"js", "Source" : '+ sourceJS+'}';
 
         String fpath_meta = 'lwc/'+componentName+'/'+componentName+'js-meta.xml';
+        String sourceMETA = '<?xml version="1.0"?>\n <LightningComponentBundle xmlns="http://soap.sforce.com/2006/04/metadata"> \n <apiVersion>50</apiVersion> \n <isExposed>true</isExposed> \n 	<targets> <target>lightning__AppPage</target> \n <target>lightning__HomePage</target>\n<target>lightning__RecordPage</target>\n </targets> \n </LightningComponentBundle>';
         String body_meta = '{"FilePath": "'+fpath_meta+'","LightningComponentBundleId":"'+lwcBundleId+'","Format":"xml", "Source" : '+ sourceMETA+'}';
 
         return null;
@@ -209,6 +211,7 @@ public with sharing class LWCDetailsHelper {
         @AuraEnabled
         public String ResponseStatusCode {get ; set;}
     }
+    public class InvalidComponentNameException extends Exception {}
 
     
 }
