@@ -21,6 +21,7 @@ export default class LwcEditorWindow extends LightningElement {
     messageContext;
     lwcBundleChangeList = [];
     lwcBundleChangeListSize = this.lwcBundleChangeList.length+' unsaved changes!';
+    isSaveDisabled =false;
     // -- Needed in the MODAL ---
     lwcBundleChangeResponse = [];
 
@@ -38,6 +39,7 @@ export default class LwcEditorWindow extends LightningElement {
     
     saveLWCBundle()
     {
+        this.isSaveDisabled=true;
         console.log(this.lwcBundleChangeList);
         saveLWCBundles({updatedResourceBundle : this.lwcBundleChangeList})
         .then((response)=>{
@@ -105,7 +107,8 @@ export default class LwcEditorWindow extends LightningElement {
         this.lwcBundleChangeList = [];
         this.lwcBundleChangeResponse = [];
         console.log('reload bundle ');
-        eval("$A.get('e.force:refreshView').fire();");
+        location.reload();
+        //eval("$A.get('e.force:refreshView').fire();");
     }
 
     

@@ -3,7 +3,7 @@
   @description       : 
   @author            : Parjanya Roy
   @group             : 
-  @last modified on  : 10-03-2022
+  @last modified on  : 13-03-2022
   @last modified by  : Parjanya Roy
 -->
 <template>
@@ -28,10 +28,18 @@
                         </lightning-textarea>
                         </div>
                         <div slot="footer">
+                            <template if:false={isSaveDisabled}>
                             <lightning-button-group>
                                 <lightning-button data-lwcbid={bundleTab.Id} variant="destructive" onclick={reloadComponentBundle} label="Cancel"></lightning-button>
                                 <lightning-button data-lwcbid={bundleTab.Id} label="Save" onclick={saveLWCBundle}></lightning-button>
                             </lightning-button-group>
+                            </template>
+                            <template if:true={isSaveDisabled}>
+                                <lightning-button-group>
+                                    <lightning-button data-lwcbid={bundleTab.Id} variant="destructive" disabled label="Cancel"></lightning-button>
+                                    <lightning-button data-lwcbid={bundleTab.Id} label="Save" disabled></lightning-button>
+                                </lightning-button-group>
+                            </template>
                         </div>
                     </lightning-card>
                 </lightning-tab>

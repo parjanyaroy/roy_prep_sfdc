@@ -30,13 +30,20 @@ public with sharing class LWCDetailsHelper {
     }
 
     @AuraEnabled
-    public static Map<String,String> createNewLWC(String componentName){
+    public static List<CreateLWCBundleResponse> createNewLWC(String componentName){
         if(componentName.trim().length()==0 || componentName.trim().contains(' '))
             throw new InvalidComponentNameException('The component name supplied was invalid');
         String lwcBundleId = ((CreateLWCBundleResponse)JSON.deserialize(createLWCBundle(componentName),CreateLWCBundleResponse.class)).id;
         System.debug(lwcBundleId);
         Map<String,String> lwcBundleComponentCreationResponse = createLWCResource(componentName, lwcBundleId);
-        return lwcBundleComponentCreationResponse;
+        List<CreateLWCBundleResponse> returnResponseList = new List<CreateLWCBundleResponse>();
+        for(String key : lwcBundleComponentCreationResponse.keySet())
+        {
+            CreateLWCBundleResponse cR = ((CreateLWCBundleResponse)JSON.deserialize(lwcBundleComponentCreationResponse.get(key),CreateLWCBundleResponse.class));
+            cR.name=key;
+            returnResponseList.add(cR);
+        }
+        return returnResponseList;
         
     }
    
@@ -54,12 +61,6 @@ public with sharing class LWCDetailsHelper {
         Map<String,String> responseMap = new Map<String,String>();         
         String endpoint = '/services/data/v52.0/tooling/sobjects/LightningComponentResource/';
         
-        String fpath_html = 'lwc/'+componentName+'/'+componentName+'.html';
-        String sourceHTML = '<!-- @description: \n @author: '+Label.LWC_IDE_Author+' \n @last modified on: '+System.today()+' \n @last modified by: '+Label.LWC_IDE_Author+' -->\n<template>\n</template>';
-        String body_html = '{"FilePath": "'+fpath_html+'","LightningComponentBundleId":"'+lwcBundleId+'","Format":"html", "Source" : "'+ sourceHTML.escapeJava()+'"}';
-        System.debug(body_html);
-        HttpResponse resp1 = triggerToolingAPI(endpoint,'POST',body_html);
-        responseMap.put(fpath_html,resp1.getBody());
 
         String fpath_js = 'lwc/'+componentName+'/'+componentName+'.js';
         String sourceJS = 'import { LightningElement } from \'lwc\'; \n export default class Empty extends LightningElement { \n }';
@@ -74,6 +75,20 @@ public with sharing class LWCDetailsHelper {
         System.debug(body_meta);
         HttpResponse resp3 = triggerToolingAPI(endpoint,'POST',body_meta);
         responseMap.put(fpath_meta,resp3.getBody());
+
+        String fpath_html = 'lwc/'+componentName+'/'+componentName+'.html';
+        String sourceHTML = '<!-- @description: \n @author: '+Label.LWC_IDE_Author+' \n @last modified on: '+System.today()+' \n @last modified by: '+Label.LWC_IDE_Author+' -->\n<template>\n</template>';
+        String body_html = '{"FilePath": "'+fpath_html+'","LightningComponentBundleId":"'+lwcBundleId+'","Format":"html", "Source" : "'+ sourceHTML.escapeJava()+'"}';
+        System.debug(body_html);
+        HttpResponse resp1 = triggerToolingAPI(endpoint,'POST',body_html);
+        responseMap.put(fpath_html,resp1.getBody());
+
+        String fpath_css = 'lwc/'+componentName+'/'+componentName+'.css';
+        String sourceCSS = ' .THIS { }';
+        String body_css = '{"FilePath": "'+fpath_css+'","LightningComponentBundleId":"'+lwcBundleId+'","Format":"css", "Source" : "'+ sourceCSS+'"}';
+        System.debug(fpath_css);
+        HttpResponse resp4 = triggerToolingAPI(endpoint,'POST',body_css);
+        responseMap.put(fpath_css,resp4.getBody());
 
         return responseMap;
     }
@@ -159,6 +174,8 @@ public with sharing class LWCDetailsHelper {
 
     public static HttpResponse triggerToolingAPI(String endpoint,String protocol,String body)
     {
+        System.debug(endpoint);
+        System.debug(body);
         Http h = new Http();
         HttpRequest req = new HttpRequest();
         String baseURL = URL.getSalesforceBaseUrl().toExternalForm();
@@ -177,6 +194,8 @@ public with sharing class LWCDetailsHelper {
             req.setBody(body);
         }
         HttpResponse response = h.send(req);
+        System.debug(response.getBody());
+        System.debug(response.getStatusCode());
         return response;
     }
     
@@ -231,6 +250,8 @@ public with sharing class LWCDetailsHelper {
         public String id {get ; set;}
         @AuraEnabled
         public String success {get ; set;}
+        @AuraEnabled
+        public String name {get ; set;}
     }
 
     public class InvalidComponentNameException extends Exception {}

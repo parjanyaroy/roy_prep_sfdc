@@ -2,7 +2,7 @@
   @description       : 
   @author            : Parjanya Roy
   @group             : 
-  @last modified on  : 10-03-2022
+  @last modified on  : 13-03-2022
   @last modified by  : Parjanya Roy
 -->
 <template>
@@ -23,7 +23,7 @@
                 </header>
                 <!-- Modal/Popup Box LWC body starts here -->
                 <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
-                <p>
+               
                     <lightning-layout multiple-rows>
                         <lightning-layout-item padding="around-small" size="12" medium-device-size="6" large-device-size="6">
                             <lightning-input name="componentName" type="text" label="Component Name" onchange={handleNewCompName} required></lightning-input>
@@ -33,13 +33,24 @@
                             {newComponentName}.html ,  {newComponentName}.js ,  {newComponentName}.js-meta.xml ,  {newComponentName}.css will be created.
                             </template>
                         </lightning-layout-item>
+                        <template if:true={lwccretionresponse}>
+                        <lightning-layout-item padding="around-small">
+                            <div>
+                                <lightning-datatable key-field="id" data={lwccretionresponse} columns={columns} hide-checkbox-column></lightning-datatable>
+                            </div>    
+                        </lightning-layout-item>
+                        </template>
                     </lightning-layout>
-                </p>
                 </div>
                 <!-- Modal/Popup Box LWC footer starts here -->
                 <footer class="slds-modal__footer">
-                    <button class="slds-button slds-button_neutral" onclick={closeModal} title="Cancel">Cancel</button>
+                    <button class="slds-button slds-button_neutral" onclick={closeModal} title="Close">Close</button>
+                    <template if:false={isSaveDisabled}>
                     <button class="slds-button slds-button_brand" onclick={submitDetails} title="Create Component">Create Component</button>
+                    </template>
+                    <template if:true={isSaveDisabled}>
+                    <button class="slds-button slds-button_brand" disabled title="Create Component">Create Component</button>
+                    </template>
                 </footer>
             </div>
         </section>
