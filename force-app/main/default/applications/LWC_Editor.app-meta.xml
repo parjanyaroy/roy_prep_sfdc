@@ -14,6 +14,6 @@
     <label>LWC Editor</label>
     <navType>Standard</navType>
     <tabs>Lightning_Web_Component_Navigator</tabs>
+    <tabs>Setup</tabs>
     <uiType>Lightning</uiType>
-    
 </CustomApplication>
