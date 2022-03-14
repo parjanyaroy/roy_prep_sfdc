@@ -1,0 +1,43 @@
+<!--
+  @description       : 
+  @author            : Parjanya Roy
+  @group             : 
+  @last modified on  : 14-03-2022
+  @last modified by  : Parjanya Roy
+-->
+<template>
+    <lightning-card>
+        <h3 slot="title">
+            <lightning-icon icon-name="utility:connected_apps" size="small"></lightning-icon>
+            Creating A New Connected App
+        </h3>
+        
+             
+            <ul class="slds-has-dividers_around-space">
+                <li class="slds-item"><b>If Connected App is not Created :</b></li>
+                <li class="slds-item">Step 1: Create a Connected App : CallMeBack_App</li>
+                <li class="slds-item">Step 2: Move all the OAuth Scopes to the selected list</li>
+                <li class="slds-item">Step 3: Provide a dummy callback URL temporarily</li>
+                <li class="slds-item">Step 4: Manage -> Edit Policies -> Admin approved users are pre-authorised</li>
+                <li class="slds-item">Step 5: Add the System Administrator Profile to the list of approved profiles.</li>
+            </ul>
+        
+    </lightning-card>
+    <lightning-card>
+        <h3 slot="title">
+            <lightning-icon icon-name="utility:connected_apps" size="small"></lightning-icon>
+            Setting Up Named Credential , Auth. Provider with Connected App
+        </h3>
+            <ul class="slds-has-dividers_around-space">
+            <li class="slds-item">Step 1: Open the Connect App CallMeBack_App </li>
+            <li class="slds-item">Step 2: Open the Auth Provider CallMeBack_AuthProvider in a separate tab and click on edit</li>
+            <li class="slds-item">Step 3: Open the named credential CallMeBack in a third tab and click on edit</li>
+            <li class="slds-item">Step 4: Copy the Consumer Id and Secret from the Connected App in Step 1 to the Consumer Key and Secret in the Auth provider (Please erase the existing values and paste the new values to ensure values are pasted correctly) . Click Save</li>
+            <li class="slds-item">Step 5:  Once saved copy the callback URL from the Auth Provider and Paste it in the Call back URL of the connected App and Click Save</li>
+            <li class="slds-item">Step 6: In the Named Credential , URL field add the same callback URL till the salesforce.com and uncheck the  Start Authentication Flow on Save , and click on Save. Once saved edit the named credential again and check the Start Authentication Flow on Save and click on save.</li>
+            <li class="slds-item">Step 7: Upon save a new browser tab will open up and you will be redirected to login and authorize the credential.Use a system admin user to login and authorize.</li>
+            <li class="slds-item">Step 8: Upon successful authorization the named credential Authentication Status will show Authenticated as usrname </li>
+        </ul>
+        
+    </lightning-card>
+</template>
