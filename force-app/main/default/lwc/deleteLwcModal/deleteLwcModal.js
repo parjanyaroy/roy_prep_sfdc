@@ -1,4 +1,5 @@
 import { LightningElement,track,api } from 'lwc';
+import deleteLWC from '@salesforce/apex/LWCDetailsHelper.deleteLWCBundleAndResource';
 
 export default class deleteLwcModal extends LightningElement {
     
@@ -10,10 +11,19 @@ export default class deleteLwcModal extends LightningElement {
     }
     closeModal() {
         this.isDeleteLWC = false;
-        this.dispatchEvent(new CustomEvent('discardchanges'));
+        this.lwcIdForDelete = null;
+        this.lwcNameForDelete = null;
+        
     }
     deletelwc() {
         this.isDeleteLWC = false;
-        this.dispatchEvent(new CustomEvent('submitchanges'));
+        deleteLWC({lwcBundleId : this.lwcIdForDelete})
+        .then(response => {
+            if(response===true)
+            {
+                location.reload();
+            }
+        });
+        
     }
 }

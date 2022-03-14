@@ -2,7 +2,7 @@
   @description       : 
   @author            : Parjanya Roy
   @group             : 
-  @last modified on  : 13-03-2022
+  @last modified on  : 14-03-2022
   @last modified by  : Parjanya Roy
 -->
 <template>
@@ -51,6 +51,7 @@
                     <template if:true={isSaveDisabled}>
                     <button class="slds-button slds-button_brand" disabled title="Create Component">Create Component</button>
                     </template>
+                    <div style="color: red;"><p>{errorMessage}</p></div>
                 </footer>
             </div>
         </section>

@@ -1,6 +1,6 @@
 public with sharing class LWCDetailsHelper {
 
-    public static List<String> coreComponents = new List<String>{'lwcEditorWindow','lwcnavigator','responseModal','lwcviewercontainer','unsavedChangesModal','createNewLwc'};
+    public static List<String> coreComponents = new List<String>{'lwcEditorWindow','lwcnavigator','responseModal','lwcviewercontainer','unsavedChangesModal','createNewLwc','deleteLwcModal'};
 
     
     @AuraEnabled
@@ -31,7 +31,7 @@ public with sharing class LWCDetailsHelper {
 
     @AuraEnabled
     public static List<CreateLWCBundleResponse> createNewLWC(String componentName){
-        if(componentName.trim().length()==0 || componentName.trim().contains(' '))
+        if(componentName.trim().length()==0 || componentName.trim().contains(' ') || componentName.trim().substring(0,1).isAllUpperCase())
             throw new InvalidComponentNameException('The component name supplied was invalid');
         String lwcBundleId = ((CreateLWCBundleResponse)JSON.deserialize(createLWCBundle(componentName),CreateLWCBundleResponse.class)).id;
         System.debug(lwcBundleId);
@@ -133,6 +133,20 @@ public with sharing class LWCDetailsHelper {
         return getLWCComponentResource(new Set<String>{lwcId});
     }
 
+    @AuraEnabled(cacheable=true)
+    public static boolean deleteLWCBundleAndResource(String lwcBundleId)
+    {
+        List<LWCComponentResourceWrapper> resourceWrapper = getLWCComponentResource(new Set<String>{lwcBundleId});
+        String endpointBundle = '/services/data/v52.0/tooling/sobjects/LightningComponentBundle/';
+        String endpointResources = '/services/data/v52.0/tooling/sobjects/LightningComponentResource/';
+        for(LWCComponentResourceWrapper res : resourceWrapper)
+        {
+            triggerToolingAPI(endpointResources+res.Id+'/', 'DELETE', null);
+        }
+        triggerToolingAPI(endpointBundle+lwcBundleId+'/', 'DELETE', null);
+        return true;
+    }
+
     public static List<LWCComponentResourceWrapper> getLWCComponentResource(Set<String> lwccomponentbundleid)
     {   
         List<LWCComponentResourceWrapper> resourceWrapperList = new List<LWCComponentResourceWrapper>();
@@ -192,6 +206,8 @@ public with sharing class LWCDetailsHelper {
         else if(protocol.trim().equalsIgnoreCase('POST')){
             req.setMethod('POST');
             req.setBody(body);
+        }else if(protocol.trim().equalsIgnoreCase('DELETE')){
+            req.setMethod('DELETE');
         }
         HttpResponse response = h.send(req);
         System.debug(response.getBody());

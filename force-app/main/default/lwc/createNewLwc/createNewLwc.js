@@ -7,7 +7,7 @@ export default class CreateNewLwc extends LightningElement {//Boolean tracked va
     newComponentName;
     lwccretionresponse = [];
     isSaveDisabled = false;
-    
+    errorMessage ;
     columns = [
         { label: 'Component Path', fieldName: 'name' },
         { label: 'Creation Status', fieldName: 'success' }
@@ -34,6 +34,10 @@ export default class CreateNewLwc extends LightningElement {//Boolean tracked va
         .then(response =>{
             console.log(response);
             this.lwccretionresponse = response;
+        })
+        .catch(error => {
+            //console.log(JSON.stringify(error.body.message));
+            this.errorMessage=error.body.message;
         }); 
         lwccretionresponse=[];
         newComponentName='';
